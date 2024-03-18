@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Supermarket</title>
+    <link rel="stylesheet" href="netbutikk.css">
+    <style>
+        /* Additional CSS for product images */
+        .product-image {
+            width: 100px; /* Adjust the width as needed */
+            height: 100px; /* Adjust the height as needed */
+        }
+    </style>
+</head>
+<body>
+    <div id="login-container">
+        <h1>Online Supermarket</h1>
+        <h2>Login</h2>
+    <form onsubmit="login(event)">
+        <input type="text" id="loginemail" placeholder="Email">
+        <input type="password" id="loginpassword" placeholder="Password">
+        <button type="submit"">Login</button>
+        <p id="login-message"></p>
+    </form>
+  
+        <h2>Register</h2>
+    <form onsubmit="signup(event)">
+        <input type="email" id="signupemail" placeholder="Email">
+        <input type="password" id="signuppassword" placeholder="New Password">
+        <button type="submit"">Register</button>
+        <p id="register-message"></p>
+    </form>
+
+
+    </div>
+    
+    <div id="store-container" style="display: none;">
+        <h2>Shopping Cart</h2>
+        <div id="cart"></div>
+        <div id="total"></div>
+        <button onclick="checkout()">Checkout</button>
+        <button onclick="logout()">Logout</button>
+        <h2>Available Products</h2>
+        <div id="product-list">
+            <div class="product" onclick="addToCart('Apple', 'image/apple.jpg', 1.99)">
+                <img class="product-image" src="image/apple.jpg" alt="Apple">
+                <p>Apple - $1.99</p>
+            </div>
+            <div class="product" onclick="addToCart('Banana', 'image/banana.jpg', 0.99)">
+                <img class="product-image" src="image/banana.jpg" alt="Banana">
+                <p>Banana - $0.99</p>
+            </div>
+            <div class="product" onclick="addToCart('Bread', 'image/bread.jpg', 2.49)">
+                <img class="product-image" src="image/bread.jpg" alt="Bread">
+                <p>Bread - $2.49</p>
+            </div>
+            <div class="product" onclick="addToCart('Milk', 'image/milk.jpg', 3.99)">
+                <img class="product-image" src="image/milk.jpg" alt="Milk">
+                <p>Milk - $3.99</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms of Service Button -->
+    <div id="terms-button">
+        <button id="terms-toggle" onclick="toggleTerms()">Show Terms of Service</button>
+    </div>
+
+    <!-- Terms of Service -->
+    <div id="terms-of-service" style="display: none;">
+        <h2>Terms of Service</h2>
+        <p>We are committed to protecting your payment information.</p>
+        <p>Shop confidently, we are always here for you.</p>
+        <p>We work with reliable shipping company partners.</p>
+        <p>We protect the personal information of customers and do not sell it to any company.</p>
+        <p>We never overcharge or change the price of a product after payment.</p>
+        <p>Full refund on failed delivery and lost product within 1-2 working days.</p>
+    </div>
+
+    <!-- Frequently Asked Questions -->
+    <div id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <p>About Us</p>
+        <p>How long have you been in business? More than 10 years</p>
+        <p>What makes you different from your competitors? We work on customer satisfaction</p>
+        <p>From where do you operate? Norway, Oslo</p>
+        <p>Returns?Within 30 days of delivery</p>
+        <p>Do you accept returns/exchanges over and above what customers are entitled to by law (i.e., a replacement/repair for a minor fault or refund for a major fault)? Yes, 100%</p>
+        <p>Do you allow refunds for a change of mind? If so, how long do customers have to contact you? Within 30 days of delivery</p>
+        <p>Shipping</p>
+        <p>To where do you ship? How long does it take you to process an order before it is dispatched? Depends on delivery address</p>
+        <p>Where are your packages shipped from? Branch near to delivery</p>
+        <p>Do you ship packages internationally? Within Europe but soon all over the world</p>
+    </div>
+
+    <script src="netbutikk.js"></script>
+    <script type="module" src="firebase.js"></script>
+
+   <!--  <script>
+        let cartItems = [];
+        
+        function login() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // Your login logic here
+            // For demonstration purposes, let's assume the login is successful if username and password are not empty
+            if (username && password) {
+                document.getElementById("login-container").style.display = "none";
+                document.getElementById("store-container").style.display = "block";
+            } else {
+                document.getElementById("login-message").innerText = "Please enter both username and password.";
+            }
+        }
+
+        function addToCart(itemName, itemImage, itemPrice) {
+            // Your add to cart logic here
+            // For demonstration purposes, let's assume the item is added successfully
+            cartItems.push({ name: itemName, image: itemImage, price: itemPrice });
+            renderCart();
+        }
+
+        function renderCart() {
+            var cartDiv = document.getElementById("cart");
+            var totalDiv = document.getElementById("total");
+            
+            cartDiv.innerHTML = ""; // Clear the previous content
+
+            var totalPrice = 0;
+
+            cartItems.forEach(item => {
+                var newItem = document.createElement("div");
+                newItem.classList.add("cart-item");
+                newItem.innerHTML = "<img class='product-image' src='" + item.image + "' alt='" + item.name + "'><p>" + item.name + " - $" + item.price.toFixed(2) + "</p>";
+                cartDiv.appendChild(newItem);
+
+                totalPrice += item.price;
+            });
+
+            totalDiv.innerText = "Total: $" + totalPrice.toFixed(2);
+        }
+
+        function logout() {
+            // Your logout logic here
+            // For demonstration purposes, let's just reload the page
+            location.reload();
+        }
+
+        function toggleTerms() {
+            var terms = document.getElementById("terms-of-service");
+            if (terms.style.display === "none") {
+                terms.style.display = "block";
+                document.getElementById("terms-toggle").textContent = "Hide Terms of Service";
+            } else {
+                terms.style.display = "none";
+                document.getElementById("terms-toggle").textContent = "Show Terms of Service";
+            }
+        }
+    </script> -->
+</body>
+</html>
